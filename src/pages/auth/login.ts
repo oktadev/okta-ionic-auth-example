@@ -68,6 +68,8 @@ export class LoginPage {
     });
   }
 
+  // https://docs.ionic.io/services/auth/custom-auth.html - requires server
+  // https://www.thepolyglotdeveloper.com/2016/01/using-an-oauth-2-0-service-within-an-ionic-2-mobile-app/
   oktaLogin(): Promise<any> {
     return this.oauthService.createAndSaveNonce().then(nonce => {
       return new Promise(function (resolve, reject) {

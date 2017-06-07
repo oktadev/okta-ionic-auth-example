@@ -16,7 +16,7 @@ export class MyApp {
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,
               oauthService: OAuthService) {
 
-    oauthService.redirectUri = window.location.origin;
+    oauthService.redirectUri = 'http://localhost:8100'; // window.location.origin
     oauthService.clientId = 'RqjWvpvWO77qMGgDfukY';
     oauthService.scope = 'openid profile email';
     oauthService.oidc = true;
