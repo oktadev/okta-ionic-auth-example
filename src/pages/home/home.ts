@@ -9,12 +9,13 @@ import { LoginPage } from '../auth/login';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public oauthService: OAuthService) {
+  constructor(public nav: NavController, public oauthService: OAuthService) {
   }
 
   logout() {
     this.oauthService.logOut();
-    this.navCtrl.setRoot(LoginPage);
+    this.nav.setRoot(LoginPage);
+    this.nav.popToRoot();
   }
 
   get givenName() {

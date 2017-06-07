@@ -15,12 +15,21 @@ export class MyApp {
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,
               oauthService: OAuthService) {
-    if (oauthService.hasValidIdToken()) {
-      this.rootPage = TabsPage;
-    } else {
-      this.rootPage = LoginPage;
-    }
 
+    oauthService.redirectUri = window.location.origin;
+    oauthService.clientId = 'RqjWvpvWO77qMGgDfukY';
+    oauthService.scope = 'openid profile email';
+    oauthService.oidc = true;
+    oauthService.issuer = 'https://dev-158606.oktapreview.com';
+
+    oauthService.loadDiscoveryDocument().then(() => {
+      oauthService.tryLogin({});
+      if (oauthService.hasValidIdToken()) {
+        this.rootPage = TabsPage;
+      } else {
+        this.rootPage = LoginPage;
+      }
+    });
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
