@@ -72,8 +72,9 @@ export class LoginPage {
   // https://www.thepolyglotdeveloper.com/2016/01/using-an-oauth-2-0-service-within-an-ionic-2-mobile-app/
   oktaLogin(): Promise<any> {
     return this.oauthService.createAndSaveNonce().then(nonce => {
+      const state: number = Math.floor(Math.random() * 1000000000);
       return new Promise(function (resolve, reject) {
-        const browserRef = window.cordova.InAppBrowser.open("https://dev-158606.oktapreview.com/oauth2/v1/authorize?client_id=RqjWvpvWO77qMGgDfukY&redirect_uri=http://localhost:8100&response_type=id_token%20token&scope=openid%20email%20profile&state=12345&nonce=" + nonce, "_blank", "location=no,clearsessioncache=yes,clearcache=yes");
+        const browserRef = window.cordova.InAppBrowser.open("https://dev-158606.oktapreview.com/oauth2/v1/authorize?client_id=RqjWvpvWO77qMGgDfukY&redirect_uri=http://localhost:8100&response_type=id_token%20token&scope=openid%20email%20profile&state=" + state + "&nonce=" + nonce, "_blank", "location=no,clearsessioncache=yes,clearcache=yes");
         browserRef.addEventListener("loadstart", (event) => {
           if ((event.url).indexOf("http://localhost:8100") === 0) {
             browserRef.removeEventListener("exit", () => {});
@@ -83,10 +84,13 @@ export class LoginPage {
             for (let i = 0; i < responseParameters.length; i++) {
               parsedResponse[responseParameters[i].split("=")[0]] = responseParameters[i].split("=")[1];
             }
-            if (parsedResponse["access_token"] !== undefined && parsedResponse["access_token"] !== null) {
+            const defaultError = 'Problem authenticating with Okta';
+            if (parseInt(parsedResponse['state']) !== state) {
+              reject(defaultError);
+            } else if (parsedResponse["access_token"] !== undefined && parsedResponse["access_token"] !== null) {
               resolve(parsedResponse);
             } else {
-              reject("Problem authenticating with Okta");
+              reject(defaultError);
             }
           }
         });
