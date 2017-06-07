@@ -1,6 +1,11 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Home</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="logout()">
+        Logout
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -13,5 +18,8 @@
   <p>
     Take a look at the <code>src/pages/</code> directory to add or change tabs,
     update any existing page or create new pages.
+  </p>
+  <p *ngIf="givenName">
+    You are logged in as: <b>{{ givenName }}</b>
   </p>
 </ion-content>
