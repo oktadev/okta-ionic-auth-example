@@ -16,8 +16,8 @@ export class LoginPage {
   private error: string;
 
   constructor(private navCtrl: NavController, private oauthService: OAuthService) {
-    oauthService.redirectUri = 'http://localhost:8100'; // window.location.origin
-    oauthService.clientId = 'RqjWvpvWO77qMGgDfukY';
+    oauthService.redirectUri = 'http://localhost:8100';
+    oauthService.clientId = 'x93g6YgYUADVWaxrybOr';
     oauthService.scope = 'openid profile email';
     oauthService.oidc = true;
     oauthService.issuer = 'https://dev-158606.oktapreview.com';
@@ -58,6 +58,12 @@ export class LoginPage {
         this.error = error.message;
       });
     });
+  }
+
+  ionViewDidLoad(): void {
+    setTimeout(() => {
+      this.email.setFocus();
+    }, 500);
   }
 
   redirectLogin() {
@@ -112,16 +118,10 @@ export class LoginPage {
 
   buildOAuthUrl(state, nonce): string {
     return this.oauthService.issuer + '/oauth2/v1/authorize?' +
-        'client_id=' + this.oauthService.clientId + '&' +
-        'redirect_uri=' + this.oauthService.redirectUri + '&' +
-        'response_type=id_token%20token&' +
-        'scope=' + encodeURI(this.oauthService.scope) + '&' +
-        'state=' + state + '&nonce=' + nonce;
-  }
-
-  ionViewDidLoad(): void {
-    setTimeout(() => {
-      this.email.setFocus();
-    }, 500);
+      'client_id=' + this.oauthService.clientId + '&' +
+      'redirect_uri=' + this.oauthService.redirectUri + '&' +
+      'response_type=id_token%20token&' +
+      'scope=' + encodeURI(this.oauthService.scope) + '&' +
+      'state=' + state + '&nonce=' + nonce;
   }
 }
