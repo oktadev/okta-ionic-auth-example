@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { LoginPage } from '../auth/login';
+import { LoginPage } from '../login/login';
 
 @Component({
   selector: 'page-home',

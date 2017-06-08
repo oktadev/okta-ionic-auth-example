@@ -24,15 +24,11 @@ export class LoginPage {
     oauthService.scope = 'openid email profile';
   }
 
-  login() {
-    this.oauthService.initImplicitFlow();
-  }
-
-  loginWithPassword(): void {
+  login(): void {
     this.oauthService.createAndSaveNonce().then(nonce => {
       const authClient = new OktaAuth({
         clientId: this.oauthService.clientId,
-        redirectUri: window.location.origin,
+        redirectUri: this.oauthService.redirectUri,
         url: this.oauthService.issuer
       });
       authClient.signIn({
@@ -74,8 +70,6 @@ export class LoginPage {
     });
   }
 
-  // https://docs.ionic.io/services/auth/custom-auth.html - requires server
-  // https://www.thepolyglotdeveloper.com/2016/01/using-an-oauth-2-0-service-within-an-ionic-2-mobile-app/
   oktaLogin(): Promise<any> {
     return this.oauthService.createAndSaveNonce().then(nonce => {
       let state: string = Math.floor(Math.random() * 1000000000).toString();
@@ -84,11 +78,8 @@ export class LoginPage {
         window.crypto.getRandomValues(array);
         state = array.join().toString();
       }
-      console.log('state is: ' + state);
-      console.log('nonce is: ' + nonce);
       return new Promise((resolve, reject) => {
         const oauthUrl = this.buildOAuthUrl(state, nonce);
-        console.log('oauthUrl', oauthUrl);
         const browser = window.cordova.InAppBrowser.open(oauthUrl, '_blank',
           'location=no,clearsessioncache=yes,clearcache=yes');
         browser.addEventListener('loadstart', (event) => {
@@ -120,15 +111,12 @@ export class LoginPage {
   }
 
   buildOAuthUrl(state, nonce): string {
-    console.log('here')
-    const url: string = this.oauthService.issuer + '/oauth2/v1/authorize?' +
+    return this.oauthService.issuer + '/oauth2/v1/authorize?' +
         'client_id=' + this.oauthService.clientId + '&' +
         'redirect_uri=' + this.oauthService.redirectUri + '&' +
         'response_type=id_token%20token&' +
         'scope=' + encodeURI(this.oauthService.scope) + '&' +
         'state=' + state + '&nonce=' + nonce;
-    console.log('url', url);
-    return url;
   }
 
   ionViewDidLoad(): void {
