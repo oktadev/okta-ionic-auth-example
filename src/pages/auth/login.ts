@@ -16,6 +16,12 @@ export class LoginPage {
   private error: string;
 
   constructor(private navCtrl: NavController, private oauthService: OAuthService) {
+    oauthService.redirectUri = 'http://localhost:8100'; // window.location.origin
+    oauthService.clientId = 'RqjWvpvWO77qMGgDfukY';
+    oauthService.scope = 'openid profile email';
+    oauthService.oidc = true;
+    oauthService.issuer = 'https://dev-158606.oktapreview.com';
+    oauthService.scope = 'openid email profile';
   }
 
   login() {
@@ -38,7 +44,7 @@ export class LoginPage {
             nonce: nonce,
             responseType: ['id_token', 'token'],
             sessionToken: response.sessionToken,
-            scopes: ['openid', 'email', 'profile']
+            scopes: this.oauthService.scope.split(' ')
           })
             .then((tokens) => {
               // oauthService.processIdToken doesn't set an access token
@@ -72,33 +78,57 @@ export class LoginPage {
   // https://www.thepolyglotdeveloper.com/2016/01/using-an-oauth-2-0-service-within-an-ionic-2-mobile-app/
   oktaLogin(): Promise<any> {
     return this.oauthService.createAndSaveNonce().then(nonce => {
-      const state: number = Math.floor(Math.random() * 1000000000);
-      return new Promise(function (resolve, reject) {
-        const browserRef = window.cordova.InAppBrowser.open("https://dev-158606.oktapreview.com/oauth2/v1/authorize?client_id=RqjWvpvWO77qMGgDfukY&redirect_uri=http://localhost:8100&response_type=id_token%20token&scope=openid%20email%20profile&state=" + state + "&nonce=" + nonce, "_blank", "location=no,clearsessioncache=yes,clearcache=yes");
-        browserRef.addEventListener("loadstart", (event) => {
-          if ((event.url).indexOf("http://localhost:8100") === 0) {
-            browserRef.removeEventListener("exit", () => {});
-            browserRef.close();
-            const responseParameters = ((event.url).split("#")[1]).split("&");
+      let state: string = Math.floor(Math.random() * 1000000000).toString();
+      if (window.crypto) {
+        const array = new Uint32Array(1);
+        window.crypto.getRandomValues(array);
+        state = array.join().toString();
+      }
+      console.log('state is: ' + state);
+      console.log('nonce is: ' + nonce);
+      return new Promise((resolve, reject) => {
+        const oauthUrl = this.buildOAuthUrl(state, nonce);
+        console.log('oauthUrl', oauthUrl);
+        const browser = window.cordova.InAppBrowser.open(oauthUrl, '_blank',
+          'location=no,clearsessioncache=yes,clearcache=yes');
+        browser.addEventListener('loadstart', (event) => {
+          if ((event.url).indexOf('http://localhost:8100') === 0) {
+            browser.removeEventListener('exit', () => {});
+            browser.close();
+            const responseParameters = ((event.url).split('#')[1]).split('&');
             const parsedResponse = {};
             for (let i = 0; i < responseParameters.length; i++) {
-              parsedResponse[responseParameters[i].split("=")[0]] = responseParameters[i].split("=")[1];
+              parsedResponse[responseParameters[i].split('=')[0]] =
+                responseParameters[i].split('=')[1];
             }
             const defaultError = 'Problem authenticating with Okta';
-            if (parseInt(parsedResponse['state']) !== state) {
+            if (parsedResponse['state'] !== state) {
               reject(defaultError);
-            } else if (parsedResponse["access_token"] !== undefined && parsedResponse["access_token"] !== null) {
+            } else if (parsedResponse['access_token'] !== undefined &&
+              parsedResponse['access_token'] !== null) {
               resolve(parsedResponse);
             } else {
               reject(defaultError);
             }
           }
         });
-        browserRef.addEventListener("exit", function (event) {
-          reject("The Okta sign in flow was canceled");
+        browser.addEventListener('exit', function (event) {
+          reject('The Okta sign in flow was canceled');
         });
       });
     });
+  }
+
+  buildOAuthUrl(state, nonce): string {
+    console.log('here')
+    const url: string = this.oauthService.issuer + '/oauth2/v1/authorize?' +
+        'client_id=' + this.oauthService.clientId + '&' +
+        'redirect_uri=' + this.oauthService.redirectUri + '&' +
+        'response_type=id_token%20token&' +
+        'scope=' + encodeURI(this.oauthService.scope) + '&' +
+        'state=' + state + '&nonce=' + nonce;
+    console.log('url', url);
+    return url;
   }
 
   ionViewDidLoad(): void {

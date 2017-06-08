@@ -8,9 +8,8 @@
 <ion-content padding>
   <div showWhen="core">
     <ion-row>
-      <ion-col>
-        <button ion-button (click)="login()">Login with Okta</button>
-        <p>Or use the form below to login directly:</p>
+      <ion-col text-center>
+        <img src="assets/image/okta.png" width="300">
       </ion-col>
     </ion-row>
     <form #loginForm="ngForm" (ngSubmit)="loginWithPassword()" autocomplete="off">
@@ -39,6 +38,11 @@
     </form>
   </div>
   <div hideWhen="core">
+    <ion-row>
+      <ion-col text-center>
+        <ion-img src="assets/image/okta.png" style="background: #fff"></ion-img>
+      </ion-col>
+    </ion-row>
     <button ion-button full (click)="redirectLogin()">Login with Okta</button>
   </div>
 </ion-content>

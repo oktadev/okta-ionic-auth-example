@@ -19,7 +19,12 @@
     Take a look at the <code>src/pages/</code> directory to add or change tabs,
     update any existing page or create new pages.
   </p>
+  <hr>
   <p *ngIf="givenName">
     You are logged in as: <b>{{ givenName }}</b>
   </p>
+  <div *ngIf="claims" class="claims">
+    <strong>Claims from Identity Token JWT:</strong>
+    <pre>{{claims | json}}</pre>
+  </div>
 </ion-content>

@@ -25,4 +25,8 @@ export class HomePage {
     }
     return claims.name;
   }
+
+  get claims() {
+    return this.oauthService.getIdentityClaims();
+  }
 }
