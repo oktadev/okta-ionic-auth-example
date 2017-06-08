@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { LoginPage } from '../login/login';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { LoginPage } from '../auth/login';
 
 @Component({
   selector: 'page-home',
@@ -15,6 +15,7 @@ export class HomePage {
   logout() {
     this.oauthService.logOut();
     this.navCtrl.setRoot(LoginPage);
+    this.navCtrl.popToRoot();
   }
 
   get givenName() {
@@ -23,5 +24,9 @@ export class HomePage {
       return null;
     }
     return claims.name;
+  }
+
+  get claims() {
+    return this.oauthService.getIdentityClaims();
   }
 }

@@ -1,3 +1,12 @@
 page-home {
-
+  .claims {
+    pre {
+      color: green;
+    }
+  }
+  pre {
+    border: 1px solid silver;
+    background: #eee;
+    padding: 10px;
+  }
 }

@@ -10,7 +10,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { LoginPage } from '../pages/auth/login';
+import { LoginPage } from '../pages/login/login';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { HttpModule } from '@angular/http';
 
@@ -41,7 +41,7 @@ import { HttpModule } from '@angular/http';
     OAuthService,
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
 export class AppModule {}
