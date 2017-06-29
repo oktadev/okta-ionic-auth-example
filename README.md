@@ -1,26 +1,14 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+To run this application, you will need to install [Node.js](https://nodejs.org/). Then run the following command to install Ionic and Cordova.
 
-## How to use this template
-
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
-
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
-
-### With the Ionic CLI:
-
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
-
-```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myTabs tabs
+```
+npm install -g cordova ionic
 ```
 
-Then, to run it, cd into `myTabs` and run:
+You'll need be able to run the application:
 
-```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
+```
+npm install
+ionic serve
 ```
 
-Substitute ios for android if not on a Mac.
-
+To setup Okta so you can log in, see [Create an OpenID Connect App in Okta](https://scotch.io/tutorials/build-an-ionic-app-with-user-authentication#toc-create-an-openid-connect-app-in-okta
