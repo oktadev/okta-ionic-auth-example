@@ -15,4 +15,4 @@ npm install
 ionic serve
 ```
 
-To setup Okta so you can log in, see [Create an OpenID Connect App in Okta](https://scotch.io/tutorials/build-an-ionic-app-with-user-authentication#toc-create-an-openid-connect-app-in-()
+To setup Okta so you can log in, see [Create an OpenID Connect App in Okta](https://scotch.io/tutorials/build-an-ionic-app-with-user-authentication#toc-create-an-openid-connect-app-in-okta)
