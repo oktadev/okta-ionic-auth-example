@@ -19,9 +19,13 @@ export class LoginPage {
     oauthService.redirectUri = 'http://localhost:8100';
     oauthService.clientId = 'x93g6YgYUADVWaxrybOr';
     oauthService.scope = 'openid profile email';
-    oauthService.oidc = true;
-    oauthService.issuer = 'https://dev-158606.oktapreview.com';
-    oauthService.scope = 'openid email profile';
+    oauthService.issuer = 'https://dev-158606.oktapreview.com/oauth2/default';
+  }
+
+  ionViewDidLoad(): void {
+    setTimeout(() => {
+      this.email.setFocus();
+    }, 500);
   }
 
   login(): void {
@@ -29,7 +33,8 @@ export class LoginPage {
       const authClient = new OktaAuth({
         clientId: this.oauthService.clientId,
         redirectUri: this.oauthService.redirectUri,
-        url: this.oauthService.issuer
+        url: 'https://dev-158606.oktapreview.com',
+        issuer: this.oauthService.issuer
       });
       authClient.signIn({
         username: this.username,
@@ -58,12 +63,6 @@ export class LoginPage {
         this.error = error.message;
       });
     });
-  }
-
-  ionViewDidLoad(): void {
-    setTimeout(() => {
-      this.email.setFocus();
-    }, 500);
   }
 
   redirectLogin() {
@@ -117,7 +116,7 @@ export class LoginPage {
   }
 
   buildOAuthUrl(state, nonce): string {
-    return this.oauthService.issuer + '/oauth2/v1/authorize?' +
+    return this.oauthService.issuer + '/v1/authorize?' +
       'client_id=' + this.oauthService.clientId + '&' +
       'redirect_uri=' + this.oauthService.redirectUri + '&' +
       'response_type=id_token%20token&' +
