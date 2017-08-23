@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { TabsPage } from '../tabs/tabs';
-declare const OktaAuth: any;
+import OktaAuth from '@okta/okta-auth-js';
 declare const window: any;
 
 @Component({
@@ -17,7 +17,7 @@ export class LoginPage {
 
   constructor(private navCtrl: NavController, private oauthService: OAuthService) {
     oauthService.redirectUri = 'http://localhost:8100';
-    oauthService.clientId = 'x93g6YgYUADVWaxrybOr';
+    oauthService.clientId = '0oabqsotq17CoayEm0h7';
     oauthService.scope = 'openid profile email';
     oauthService.issuer = 'https://dev-158606.oktapreview.com/oauth2/default';
   }
@@ -36,12 +36,12 @@ export class LoginPage {
         url: 'https://dev-158606.oktapreview.com',
         issuer: this.oauthService.issuer
       });
-      authClient.signIn({
+      return authClient.signIn({
         username: this.username,
         password: this.password
       }).then((response) => {
         if (response.status === 'SUCCESS') {
-          authClient.token.getWithoutPrompt({
+          return authClient.token.getWithoutPrompt({
             nonce: nonce,
             responseType: ['id_token', 'token'],
             sessionToken: response.sessionToken,
@@ -53,8 +53,7 @@ export class LoginPage {
               localStorage.setItem('access_token', tokens[1].accessToken);
               this.oauthService.processIdToken(tokens[0].idToken, tokens[1].accessToken);
               this.navCtrl.push(TabsPage);
-            })
-            .catch(error => console.error(error));
+            });
         } else {
           throw new Error('We cannot handle the ' + response.status + ' status');
         }
