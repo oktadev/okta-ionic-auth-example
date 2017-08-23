@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { LoginPage } from '../login/login';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { LoginPage } from '../login/login';
 
 @Component({
   selector: 'page-home',
@@ -19,7 +19,7 @@ export class HomePage {
   }
 
   get givenName() {
-    const claims = this.oauthService.getIdentityClaims();
+    const claims: any = this.oauthService.getIdentityClaims();
     if (!claims) {
       return null;
     }

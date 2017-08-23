@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { TabsPage } from '../tabs/tabs';
-declare const OktaAuth: any;
+import OktaAuth from '@okta/okta-auth-js';
 declare const window: any;
 
 @Component({
@@ -17,11 +17,15 @@ export class LoginPage {
 
   constructor(private navCtrl: NavController, private oauthService: OAuthService) {
     oauthService.redirectUri = 'http://localhost:8100';
-    oauthService.clientId = 'x93g6YgYUADVWaxrybOr';
+    oauthService.clientId = '0oabqsotq17CoayEm0h7';
     oauthService.scope = 'openid profile email';
-    oauthService.oidc = true;
-    oauthService.issuer = 'https://dev-158606.oktapreview.com';
-    oauthService.scope = 'openid email profile';
+    oauthService.issuer = 'https://dev-158606.oktapreview.com/oauth2/default';
+  }
+
+  ionViewDidLoad(): void {
+    setTimeout(() => {
+      this.email.setFocus();
+    }, 500);
   }
 
   login(): void {
@@ -29,14 +33,15 @@ export class LoginPage {
       const authClient = new OktaAuth({
         clientId: this.oauthService.clientId,
         redirectUri: this.oauthService.redirectUri,
-        url: this.oauthService.issuer
+        url: 'https://dev-158606.oktapreview.com',
+        issuer: this.oauthService.issuer
       });
-      authClient.signIn({
+      return authClient.signIn({
         username: this.username,
         password: this.password
       }).then((response) => {
         if (response.status === 'SUCCESS') {
-          authClient.token.getWithoutPrompt({
+          return authClient.token.getWithoutPrompt({
             nonce: nonce,
             responseType: ['id_token', 'token'],
             sessionToken: response.sessionToken,
@@ -48,8 +53,7 @@ export class LoginPage {
               localStorage.setItem('access_token', tokens[1].accessToken);
               this.oauthService.processIdToken(tokens[0].idToken, tokens[1].accessToken);
               this.navCtrl.push(TabsPage);
-            })
-            .catch(error => console.error(error));
+            });
         } else {
           throw new Error('We cannot handle the ' + response.status + ' status');
         }
@@ -58,12 +62,6 @@ export class LoginPage {
         this.error = error.message;
       });
     });
-  }
-
-  ionViewDidLoad(): void {
-    setTimeout(() => {
-      this.email.setFocus();
-    }, 500);
   }
 
   redirectLogin() {
@@ -117,7 +115,7 @@ export class LoginPage {
   }
 
   buildOAuthUrl(state, nonce): string {
-    return this.oauthService.issuer + '/oauth2/v1/authorize?' +
+    return this.oauthService.issuer + '/v1/authorize?' +
       'client_id=' + this.oauthService.clientId + '&' +
       'redirect_uri=' + this.oauthService.redirectUri + '&' +
       'response_type=id_token%20token&' +
