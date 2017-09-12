@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { LoginPage } from '../login/login';
 
@@ -9,13 +9,13 @@ import { LoginPage } from '../login/login';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public oauthService: OAuthService) {
+  constructor(public app: App, public navCtrl: NavController, public oauthService: OAuthService) {
   }
 
   logout() {
     this.oauthService.logOut();
-    this.navCtrl.setRoot(LoginPage);
-    this.navCtrl.popToRoot();
+    this.app.getRootNav().setRoot(LoginPage);
+//     this.navCtrl.popToRoot();
   }
 
   get givenName() {
