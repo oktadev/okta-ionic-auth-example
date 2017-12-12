@@ -15,7 +15,6 @@ export class HomePage {
   logout() {
     this.oauthService.logOut();
     this.app.getRootNav().setRoot(LoginPage);
-//     this.navCtrl.popToRoot();
   }
 
   get givenName() {
