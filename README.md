@@ -15,7 +15,14 @@ Please read [Build an Ionic App with User Authentication](https://developer.okta
 
 ## Getting Started
 
-To run this application, you will need to install [Node.js](https://nodejs.org/). Then run the following command to install Ionic and Cordova.
+To install this example application, run the following commands:
+
+```bash
+git clone git@github.com:oktadeveloper/okta-ionic-auth-example.git
+cd okta-ionic-auth-example
+```
+
+This will get a copy of the project installed locally. Then run the following command to install Ionic and Cordova.
 
 ```
 npm install -g cordova ionic
