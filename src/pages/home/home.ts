@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { App } from 'ionic-angular';
 import { LoginPage } from '../login/login';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'page-home',
@@ -9,12 +9,12 @@ import { LoginPage } from '../login/login';
 })
 export class HomePage {
 
-  constructor(public app: App, public navCtrl: NavController, public oauthService: OAuthService) {
+  constructor(public app: App, public oauthService: OAuthService) {
   }
 
   logout() {
-    this.oauthService.logOut();
-    this.app.getRootNav().setRoot(LoginPage);
+    this.oauthService.logOut(true);
+    this.app.getRootNavs()[0].setRoot(LoginPage);
   }
 
   get givenName() {
