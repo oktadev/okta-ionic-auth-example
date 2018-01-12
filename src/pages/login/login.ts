@@ -1,10 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { IonicPage, NavController } from 'ionic-angular';
+import { JwksValidationHandler, OAuthService } from 'angular-oauth2-oidc';
+import * as OktaAuth from '@okta/okta-auth-js';
 import { TabsPage } from '../tabs/tabs';
-import OktaAuth from '@okta/okta-auth-js';
+
 declare const window: any;
 
+@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
@@ -15,11 +17,17 @@ export class LoginPage {
   private password: string;
   private error: string;
 
-  constructor(private navCtrl: NavController, private oauthService: OAuthService) {
+  constructor(public navCtrl: NavController, private oauthService: OAuthService) {
     oauthService.redirectUri = 'http://localhost:8100';
     oauthService.clientId = '0oabqsotq17CoayEm0h7';
     oauthService.scope = 'openid profile email';
     oauthService.issuer = 'https://dev-158606.oktapreview.com/oauth2/default';
+    oauthService.tokenValidationHandler = new JwksValidationHandler();
+
+    // Load Discovery Document and then try to login the user
+    this.oauthService.loadDiscoveryDocument().then(() => {
+      this.oauthService.tryLogin();
+    });
   }
 
   ionViewDidLoad(): void {
@@ -34,7 +42,7 @@ export class LoginPage {
         clientId: this.oauthService.clientId,
         redirectUri: this.oauthService.redirectUri,
         url: 'https://dev-158606.oktapreview.com',
-        issuer: this.oauthService.issuer
+        issuer: 'default'
       });
       return authClient.signIn({
         username: this.username,
@@ -48,10 +56,13 @@ export class LoginPage {
             scopes: this.oauthService.scope.split(' ')
           })
             .then((tokens) => {
-              // oauthService.processIdToken doesn't set an access token
-              // set it manually so oauthService.authorizationHeader() works
-              localStorage.setItem('access_token', tokens[1].accessToken);
-              this.oauthService.processIdToken(tokens[0].idToken, tokens[1].accessToken);
+              const idToken = tokens[0].idToken;
+              const accessToken = tokens[1].accessToken;
+              const keyValuePair = `#id_token=${encodeURIComponent(idToken)}&access_token=${encodeURIComponent(accessToken)}`;
+              this.oauthService.tryLogin({
+                customHashFragment: keyValuePair,
+                disableOAuth2StateCheck: true
+              });
               this.navCtrl.push(TabsPage);
             });
         } else {
@@ -66,8 +77,13 @@ export class LoginPage {
 
   redirectLogin() {
     this.oktaLogin().then(success => {
-      localStorage.setItem('access_token', success.access_token);
-      this.oauthService.processIdToken(success.id_token, success.access_token);
+      const idToken = success.id_token;
+      const accessToken = success.access_token;
+      const keyValuePair = `#id_token=${encodeURIComponent(idToken)}&access_token=${encodeURIComponent(accessToken)}`;
+      this.oauthService.tryLogin({
+        customHashFragment: keyValuePair,
+        disableOAuth2StateCheck: true
+      });
       this.navCtrl.push(TabsPage);
     }, (error) => {
       this.error = error;
@@ -101,6 +117,7 @@ export class LoginPage {
               reject(defaultError);
             } else if (parsedResponse['access_token'] !== undefined &&
               parsedResponse['access_token'] !== null) {
+
               resolve(parsedResponse);
             } else {
               reject(defaultError);

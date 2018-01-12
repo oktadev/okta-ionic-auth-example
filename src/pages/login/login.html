@@ -8,34 +8,34 @@
 <ion-content padding>
   <ion-row>
     <ion-col text-center>
-      <img src="assets/image/okta.png" width="300">
+      <img src="assets/imgs/okta.png" width="300">
     </ion-col>
   </ion-row>
   <div showWhen="core">
     <form #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off">
-    <ion-row>
-      <ion-col>
-        <ion-list inset>
-          <ion-item>
-            <ion-input placeholder="Email" name="username" id="loginField"
-                       type="text" required [(ngModel)]="username" #email></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-input placeholder="Password" name="password" id="passwordField"
-                       type="password" required [(ngModel)]="password"></ion-input>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <div *ngIf="error" class="alert alert-danger">{{error}}</div>
-        <button ion-button class="submit-btn" full type="submit"
-                [disabled]="!loginForm.form.valid">Login
-        </button>
-      </ion-col>
-    </ion-row>
-  </form>
+      <ion-row>
+        <ion-col>
+          <ion-list inset>
+            <ion-item>
+              <ion-input placeholder="Email" name="username" id="loginField"
+                         type="text" required [(ngModel)]="username" #email></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input placeholder="Password" name="password" id="passwordField"
+                         type="password" required [(ngModel)]="password"></ion-input>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+          <button ion-button class="submit-btn" full type="submit"
+                  [disabled]="!loginForm.form.valid">Login
+          </button>
+        </ion-col>
+      </ion-row>
+    </form>
   </div>
   <div hideWhen="core">
     <button ion-button full (click)="redirectLogin()">Login with Okta</button>

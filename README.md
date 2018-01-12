@@ -6,7 +6,7 @@ Please read [Build an Ionic App with User Authentication](https://developer.okta
 
 **Prerequisites:** [Node.js](https://nodejs.org/).
 
-> [Okta](https://developer.okta.com/) has Authentication and User Management APIs that reduce development time with instant-on, scalable user infrastructure. Okta's intuitive API and expert support make it easy for developers to authenticate, manage and secure users and roles in any application.
+> [Okta](https://developer.okta.com/) has Authentication and User Management APIs that reduce development time with instant-on, scalable user infrastructure. Okta's intuitive API and expert support make it easy for developers to authenticate, manage, and secure users and roles in any application.
 
 * [Getting Started](#getting-started)
 * [Links](#links)
@@ -50,7 +50,9 @@ constructor(private navCtrl: NavController, private oauthService: OAuthService) 
   oauthService.redirectUri = 'http://localhost:8100';
   oauthService.clientId = '{clientId}';
   oauthService.scope = 'openid profile email';
-  oauthService.issuer = 'https://{yourOktaDomain}.com/oauth2/default';
+  oauthService.issuer = 'https://{youtOktaDomain}.com/oauth2/default';
+  oauthService.tokenValidationHandler = new JwksValidationHandler();
+  ...
 }
 ```
 
