@@ -18,7 +18,7 @@ Please read [Build an Ionic App with User Authentication](https://developer.okta
 To install this example application, run the following commands:
 
 ```bash
-git clone git@github.com:oktadeveloper/okta-ionic-auth-example.git
+git clone https://github.com/oktadeveloper/okta-ionic-auth-example.git
 cd okta-ionic-auth-example
 ```
 
