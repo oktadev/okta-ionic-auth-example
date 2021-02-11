@@ -1,5 +1,7 @@
 # Ionic App with Okta Authentication
 
+## This is an old example. Please see [Ionic + Sign in with Apple and Google](https://developer.okta.com/blog/2020/09/21/ionic-apple-google-signin) for an updated version.
+
 This example shows how to create an Ionic application that uses Cordova's in-app browser to log in with Okta.
 
 Please read [Build an Ionic App with User Authentication](https://developer.okta.com/blog/2017/08/22/build-an-ionic-app-with-user-authentication) to see how this application was created.
